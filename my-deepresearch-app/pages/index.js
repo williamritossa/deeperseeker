@@ -16,7 +16,7 @@ export default function Home({ placeholders }) {
   const textareaRef = useRef(null);
 
   useEffect(() => {
-    // Shuffle placeholders once on mount
+    // Shuffle placeholders on mount
     const shuffledArray = [...placeholders].sort(() => Math.random() - 0.5);
     setShuffled(shuffledArray);
     setCurrentPlaceholder(shuffledArray[0]);
@@ -66,12 +66,40 @@ export default function Home({ placeholders }) {
   // Placeholder fades out if user types
   const fadeDuration = (!prompt || prompt.trim() === '') ? 0.4 : 0;
 
+  const scrollToSection = (id) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const exampleReportNames = [
+    "Creating a Loyalty Program Marketplace",
+    "Market Analysis Report",
+    "Competitor Insights",
+    "Sales Growth Report",
+    "Customer Engagement Study",
+    "Product Innovation Brief"
+  ];
+
   return (
     <div className="container">
-      <div className="card">
-        <h1>AI Deep Research Service</h1>
+      {/* Hero Section */}
+      <header className="hero">
+        <h1 className="hero-title">Your Big, Bold Title Here</h1>
+        <p className="hero-subtitle">
+          Powered by OpenAI{' '}
+          <a
+            href="https://openai.com/index/introducing-deep-research/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'underline' }}
+          >
+            Deep Research
+          </a>
+        </p>
 
-        {/* Bubble container */}
+        {/* Prompt Input */}
         <div className="input-bubble">
           {/* Placeholder overlay */}
           <div className="placeholder-overlay">
@@ -105,66 +133,94 @@ export default function Home({ placeholders }) {
           </button>
         </div>
 
-        <div className="tips">
-          <h2>What makes a great research prompt?</h2>
-          <ol>
-            <li>
-              <strong>Context, context, context:</strong> Think of your prompt like a detailed brief—not a quick question. The more background, data, or failed attempts you include, the better. If you have any doubts, add even more context.
-            </li>
-            <li>
-              <strong>Specify the Goal, Not the Method:</strong> Don’t tell the AI how to solve it; tell it exactly what you want in the final output (e.g. “a 3-page report with pros/cons and a final recommendation”). Let the AI figure out the reasoning.
-            </li>
-            <li>
-              <strong>Focus on a Single, Well-Defined Ask:</strong> Trying to tackle multiple goals at once leads to muddled results. Zero in on one major outcome—whether that’s a research paper, a piece of code, or a specific evaluation.
-            </li>
-            <li>
-              <strong>Include Relevant Attempts & Constraints:</strong> If you’ve already tried certain solutions or if there are specific limitations (like budget, timeline, or style), spell them out. Treat it like briefing a new hire on day one.
-            </li>
-          </ol>
+        {/* CTA Buttons */}
+        <div className="cta-buttons">
+          <button onClick={() => scrollToSection('how-it-works')} className="cta-button">
+            <i className="bi bi-info-circle" style={{ marginRight: '6px' }}></i>
+            How it works
+          </button>
+          <button onClick={() => scrollToSection('examples')} className="cta-button">
+            <i className="bi bi-grid-3x3-gap" style={{ marginRight: '6px' }}></i>
+            Examples
+          </button>
         </div>
+      </header>
 
-        <div className="examples">
-          <h2>Example Reports</h2>
-          <div className="grid">
-            <div className="grid-item">Example 1</div>
-            <div className="grid-item">Example 2</div>
-            <div className="grid-item">Example 3</div>
-            <div className="grid-item">Example 4</div>
-          </div>
+      {/* How It Works Section */}
+      <section id="how-it-works" className="how-it-works">
+        <h2>What makes a great research prompt?</h2>
+        <ol>
+          <li>
+            <strong>Context, context, context:</strong> Think of your prompt like a detailed brief—not a quick question.
+            The more background, data, or failed attempts you include, the better. If you have any doubts, add even more context.
+          </li>
+          <li>
+            <strong>Specify the Goal, Not the Method:</strong> Don’t tell the AI how to solve it; tell it exactly what you
+            want in the final output (e.g. “pros/cons and a final recommendation”). Let the AI figure out the reasoning.
+          </li>
+          <li>
+            <strong>Focus on a Single, Well-Defined Ask:</strong> Trying to tackle multiple goals at once leads to muddled results.
+            Zero in on one major outcome.
+          </li>
+          <li>
+            <strong>Include Relevant Attempts &amp; Constraints:</strong> If you’ve already tried certain solutions or if there are
+            specific limitations (like budget, timeline, or style), spell them out. Treat it like briefing a new hire on day one.
+          </li>
+        </ol>
+      </section>
+
+      {/* Examples Section */}
+      <section id="examples" className="examples">
+        <h2>Example Reports</h2>
+        <div className="grid">
+          {exampleReportNames.map((name, i) => (
+            <div
+              key={i}
+              className="grid-item"
+              onClick={() => window.open(`/example${i + 1}`, '_blank')}
+            >
+              {name}
+            </div>
+          ))}
         </div>
-      </div>
+      </section>
 
       <style jsx>{`
         /* Overall page layout */
         .container {
+          background: #f2f0ec;
           min-height: 100vh;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background: #f0f2f5;
-          padding: 20px;
-        }
-        .card {
-          background: #fff;
-          padding: 40px;
-          border-radius: 10px;
-          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-          max-width: 600px;
-          width: 100%;
-          text-align: center;
-        }
-        h1 {
-          margin-bottom: 20px;
+          padding: 40px 20px;
+          font-family: sans-serif;
         }
 
-        /* The bubble container for the text area + placeholder + button */
+        /* Hero Section */
+        .hero {
+          max-width: 800px;
+          margin: 0 auto;
+          text-align: center;
+          margin-bottom: 50px;
+        }
+        .hero-title {
+          font-size: 2.5rem;
+          padding-top: 30px;
+          margin-bottom: 10px;
+          font-weight: 600;
+        }
+        .hero-subtitle {
+          font-size: 1.2rem;
+          margin-bottom: 30px;
+          color: #555;
+        }
+
+        /* Bubble container for the text area + placeholder + button */
         .input-bubble {
           position: relative;
           border: 1px solid #ddd;
           border-radius: 24px;
           padding: 8px 12px;
-          margin: 0 auto 30px;
-          max-width: 550px;
+          max-width: 700px;
+          margin: 0 auto 20px; 
           background: #fff;
           box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         }
@@ -220,33 +276,81 @@ export default function Home({ placeholders }) {
           cursor: not-allowed;
         }
 
-        .tips {
-          text-align: left;
-          margin-bottom: 30px;
+        /* CTA Buttons */
+        .cta-buttons {
+          display: flex;
+          justify-content: center;
+          gap: 16px;
+          margin-top: 20px;
         }
-        .tips h2 {
-          margin-bottom: 10px;
+        .cta-button {
+          display: inline-flex;
+          align-items: center;
+          background: #fff;
+          border: 1px solid #ddd;
+          border-radius: 24px;
+          padding: 10px 20px;
+          font-size: 16px;
+          color: #333;
+          cursor: pointer;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+          transition: all 0.3s ease;
         }
-        .tips ol {
-          padding-left: 20px;
-        }
-        .tips li {
-          margin-bottom: 8px;
+        .cta-button:hover {
+          box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+          transform: translateY(-1px);
         }
 
+        /* How It Works section */
+        .how-it-works {
+          max-width: 800px;
+          margin: 0 auto 50px;
+          text-align: left;
+        }
+        .how-it-works h2 {
+          font-size: 1.8rem;
+          margin-bottom: 20px;
+        }
+        .how-it-works ol {
+          padding-left: 20px;
+          line-height: 1.6;
+        }
+        .how-it-works li {
+          margin-bottom: 12px;
+        }
+
+        /* Examples Section */
+        .examples {
+          max-width: 800px;
+          margin: 0 auto;
+          text-align: left;
+        }
         .examples h2 {
-          margin-bottom: 10px;
+          font-size: 1.8rem;
+          margin-bottom: 20px;
+          text-align: left;
         }
         .grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-          gap: 10px;
+          grid-template-columns: repeat(2, 1fr); /* 2 columns, 3 rows for 6 tiles */
+          gap: 20px;
         }
         .grid-item {
-          background: #e9ecef;
+          background: #ffffff;
           padding: 20px;
-          border-radius: 5px;
+          border-radius: 8px;
           box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          cursor: pointer;
+          transition: transform 0.2s, box-shadow 0.2s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1rem;
+          text-align: center;
+        }
+        .grid-item:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
       `}</style>
     </div>
