@@ -6,10 +6,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
-      // Parse the user’s prompt from the request body
       const { researchPrompt } = req.body;
 
-      // Create a Stripe Checkout session
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: [
@@ -18,16 +16,16 @@ export default async function handler(req, res) {
               currency: 'usd',
               product_data: {
                 name: 'Deep Research report emailed to you',
-                // Use the user’s prompt as the description
                 description: researchPrompt,
               },
-              unit_amount: 500, // $5 in cents
+              unit_amount: 500,
             },
             quantity: 1,
           },
         ],
         mode: 'payment',
-        success_url: 'http://localhost:3000/success',
+        metadata: { researchPrompt },
+        success_url: `http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: 'http://localhost:3000/cancel',
       });
 
